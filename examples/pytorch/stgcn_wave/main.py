@@ -126,7 +126,8 @@ for epoch in range(1, epochs + 1):
         torch.save(model.state_dict(), save_path)
     print("epoch", epoch, ", train loss:", l_sum / n, ", validation loss:", val_loss)
 
-    wandb.log({"loss": loss})
+    wandb.log({"train loss":  l_sum / n})
+    wandb.log({"validation loss":  val_loss})
     # Optional
     wandb.watch(model)
 
