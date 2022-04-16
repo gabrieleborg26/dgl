@@ -11,6 +11,9 @@ from sensors2graph import *
 import torch.nn as nn
 import argparse
 import scipy.sparse as sp
+import wandb
+
+wandb.init(project="metr-la", entity="gabriele26")
 
 parser = argparse.ArgumentParser(description='STGCN_WAVE')
 parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
@@ -29,6 +32,14 @@ parser.add_argument('--channels', type=int, nargs='+', default=[1, 16, 32, 64, 3
 args = parser.parse_args()
 
 device = torch.device("cuda") if torch.cuda.is_available() and not args.disablecuda else torch.device("cpu")
+
+
+wandb.config = {
+  "learning_rate": 0.001,
+  "epochs": args.epochs,
+  "batch_size": args.batch_size
+}
+
 
 with open(args.sensorsfilepath) as f:
     sensor_ids = f.read().strip().split(',')
@@ -114,6 +125,10 @@ for epoch in range(1, epochs + 1):
         min_val_loss = val_loss
         torch.save(model.state_dict(), save_path)
     print("epoch", epoch, ", train loss:", l_sum / n, ", validation loss:", val_loss)
+
+    wandb.log({"loss": loss})
+    # Optional
+    wandb.watch(model)
 
     
 best_model = STGCN_WAVE(blocks, n_his, n_route, G, drop_prob, num_layers, device, args.control_str).to(device)
