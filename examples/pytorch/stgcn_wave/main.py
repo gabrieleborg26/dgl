@@ -11,9 +11,9 @@ from sensors2graph import *
 import torch.nn as nn
 import argparse
 import scipy.sparse as sp
-import wandb
+# import wandb
 
-wandb.init(project="stgcn_qtraffic", entity="gabriele26")
+# wandb.init(project="stgcn_qtraffic", entity="gabriele26")
 
 parser = argparse.ArgumentParser(description='STGCN_WAVE')
 parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
@@ -34,11 +34,11 @@ args = parser.parse_args()
 device = torch.device("cuda") if torch.cuda.is_available() and not args.disablecuda else torch.device("cpu")
 
 
-wandb.config = {
-  "learning_rate": 0.001,
-  "epochs": args.epochs,
-  "batch_size": args.batch_size
-}
+# wandb.config = {
+#   "learning_rate": 0.001,
+#   "epochs": args.epochs,
+#   "batch_size": args.batch_size
+# }
 
 print("loading model", "epochs", args.epochs, "batch_size", args.batch_size)
 
@@ -127,11 +127,11 @@ for epoch in range(1, epochs + 1):
         torch.save(model.state_dict(), save_path)
     print("epoch", epoch, ", train loss:", l_sum / n, ", validation loss:", val_loss)
 
-    wandb.log({"train loss":  l_sum / n})
-    wandb.log({"validation loss":  val_loss})
+#     wandb.log({"train loss":  l_sum / n})
+#     wandb.log({"validation loss":  val_loss})
 
     # Optional
-    wandb.watch(model)
+#     wandb.watch(model)
 
     
 best_model = STGCN_WAVE(blocks, n_his, n_route, G, drop_prob, num_layers, device, args.control_str).to(device)
