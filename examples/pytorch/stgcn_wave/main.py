@@ -40,6 +40,7 @@ wandb.config = {
   "batch_size": args.batch_size
 }
 
+print("loading model", "epochs", args.epochs, "batch_size", args.batch_size)
 
 with open(args.sensorsfilepath) as f:
     sensor_ids = f.read().strip().split(',')
