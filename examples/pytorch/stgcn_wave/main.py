@@ -13,7 +13,7 @@ import argparse
 import scipy.sparse as sp
 import wandb
 
-wandb.init(project="metr-la", entity="gabriele26")
+wandb.init(project="stgcn_qtraffic", entity="gabriele26")
 
 parser = argparse.ArgumentParser(description='STGCN_WAVE')
 parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
@@ -22,9 +22,9 @@ parser.add_argument('--batch_size', type=int, default=50, help='batch size for t
 parser.add_argument('--epochs', type=int, default=50, help='epochs for training  (default: 50)')
 parser.add_argument('--num_layers', type=int, default=9, help='number of layers')
 parser.add_argument('--window', type=int, default=144, help='window length')
-parser.add_argument('--sensorsfilepath', type=str, default='./data/sensor_graph/graph_sensor_ids.txt', help='sensors file path')
-parser.add_argument('--disfilepath', type=str, default='./data/sensor_graph/distances_la_2012.csv', help='distance file path')
-parser.add_argument('--tsfilepath', type=str, default='./data/metr-la.h5', help='ts file path')
+parser.add_argument('--sensorsfilepath', type=str, default='./data/sensor_graph/graph_sensor_qtraffic.txt', help='sensors file path')
+parser.add_argument('--disfilepath', type=str, default='./data/sensor_graph/distance_qtraffic.csv', help='distance file path')
+parser.add_argument('--tsfilepath', type=str, default='./data/qtraffic.h5', help='ts file path')
 parser.add_argument('--savemodelpath', type=str, default='stgcnwavemodel.pt', help='save model path')
 parser.add_argument('--pred_len', type=int, default=5, help='how many steps away we want to predict')
 parser.add_argument('--control_str', type=str, default='TNTSTNTST', help='model strcture controller, T: Temporal Layer, S: Spatio Layer, N: Norm Layer')
@@ -126,7 +126,9 @@ for epoch in range(1, epochs + 1):
         torch.save(model.state_dict(), save_path)
     print("epoch", epoch, ", train loss:", l_sum / n, ", validation loss:", val_loss)
 
-    wandb.log({"loss": loss})
+    wandb.log({"train loss":  l_sum / n})
+    wandb.log({"validation loss":  val_loss})
+
     # Optional
     wandb.watch(model)
 
