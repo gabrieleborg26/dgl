@@ -14,7 +14,7 @@ import scipy.sparse as sp
 import wandb
 
 
-wandb.init(project="stgcn_maltra", entity="gabriele26")
+wandb.init(project="stgcn_maltra_6", entity="gabriele26")
 
 
 parser = argparse.ArgumentParser(description='STGCN_WAVE')
