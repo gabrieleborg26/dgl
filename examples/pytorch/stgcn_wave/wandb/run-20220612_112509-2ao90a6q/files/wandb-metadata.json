@@ -1,0 +1,22 @@
+{
+    "os": "Windows-10-10.0.19041-SP0",
+    "python": "3.6.13",
+    "heartbeatAt": "2022-06-12T09:25:12.805208",
+    "startedAt": "2022-06-12T09:25:09.512273",
+    "docker": null,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "main.py",
+    "codePath": "examples\\pytorch\\stgcn_wave\\main.py",
+    "git": {
+        "remote": "https://github.com/gabrieleborg26/dgl.git",
+        "commit": "921ccf65afbe8472a6925de71973e5c2e436e99b"
+    },
+    "email": "gabrieleborg26@gmail.com",
+    "root": "C:/Users/User/Documents/masters/Metr-la/metr-la wb/dgl",
+    "host": "LAPTOP-DVGU34RM",
+    "username": "User",
+    "executable": "C:\\Users\\User\\miniconda3\\envs\\stgcn_wave\\python.exe"
+}
