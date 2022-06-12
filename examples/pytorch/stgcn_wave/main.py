@@ -36,11 +36,11 @@ args = parser.parse_args()
 device = torch.device("cuda") if torch.cuda.is_available() and not args.disablecuda else torch.device("cpu")
 
 
-# wandb.config = {
-#   "learning_rate": 0.001,
-#   "epochs": args.epochs,
-#   "batch_size": args.batch_size
-# }
+wandb.config = {
+  "learning_rate": 0.001,
+  "epochs": args.epochs,
+  "batch_size": args.batch_size
+}
 
 print("loading model", "epochs", args.epochs, "batch_size", args.batch_size)
 
