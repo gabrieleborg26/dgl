@@ -13,6 +13,7 @@ from dataloading import METR_LAGraphDataset, METR_LATrainDataset,\
     PEMS_BAYGraphDataset, PEMS_BAYTrainDataset,\
     PEMS_BAYValidDataset, PEMS_BAYTestDataset
 from utils import NormalizationLayer, masked_mae_loss, get_learning_rate
+import wandb
 
 batch_cnt = [0]
 
@@ -107,7 +108,7 @@ def eval(model, graph, dataloader, normalizer, loss_fn, device, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # Define the arguments
-    parser.add_argument('--batch_size', type=int, default=64,
+    parser.add_argument('--batch_size', type=int, default=50,
                         help="Size of batch for minibatch Training")
     parser.add_argument('--num_workers', type=int, default=0,
                         help="Number of workers for parallel dataloading")
@@ -127,7 +128,7 @@ if __name__ == "__main__":
                         help="Lower bound of learning rate")
     parser.add_argument('--dataset', type=str, default='LA',
                         help="dataset LA for METR_LA; BAY for PEMS_BAY")
-    parser.add_argument('--epochs', type=int, default=100,
+    parser.add_argument('--epochs', type=int, default=50,
                         help="Number of epoches for training")
     parser.add_argument('--max_grad_norm', type=float, default=5.0,
                         help="Maximum gradient norm for update parameters")
@@ -177,6 +178,13 @@ if __name__ == "__main__":
 
     loss_fn = masked_mae_loss
 
+    wandb.init(project="metr-la-dcrnn", entity="gabriele26")
+
+    wandb.config = {
+    "learning_rate": 0.01,
+    "epochs": 50,
+    "batch_size": 50
+    }
     for e in range(args.epochs):
         train_loss = train(dcrnn, g, train_loader, optimizer, scheduler,
                            normalizer, loss_fn, device, args)
@@ -184,7 +192,11 @@ if __name__ == "__main__":
                           normalizer, loss_fn, device, args)
         test_loss = eval(dcrnn, g, test_loader,
                          normalizer, loss_fn, device, args)
+
+
+        wandb.log({"train_loss": train_loss, "valid_loss":valid_loss, "test_loss":test_loss })
         print("Epoch: {} Train Loss: {} Valid Loss: {} Test Loss: {}".format(e,
                                                                              train_loss,
                                                                              valid_loss,
                                                                              test_loss))
+        wandb.watch(dcrnn)
