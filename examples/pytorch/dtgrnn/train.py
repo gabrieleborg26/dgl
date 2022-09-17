@@ -172,7 +172,7 @@ if __name__ == "__main__":
                      num_layers=2,
                      net=net,
                      decay_steps=args.decay_steps).to(device)
-
+    
     optimizer = torch.optim.Adam(dcrnn.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.99)
 
@@ -188,15 +188,19 @@ if __name__ == "__main__":
     for e in range(args.epochs):
         train_loss = train(dcrnn, g, train_loader, optimizer, scheduler,
                            normalizer, loss_fn, device, args)
-        valid_loss = eval(dcrnn, g, valid_loader,
+        valid_loss = eval(
+            , g, valid_loader,
                           normalizer, loss_fn, device, args)
         test_loss = eval(dcrnn, g, test_loader,
                          normalizer, loss_fn, device, args)
 
-
+         
         wandb.log({"train_loss": train_loss, "valid_loss":valid_loss, "test_loss":test_loss })
         print("Epoch: {} Train Loss: {} Valid Loss: {} Test Loss: {}".format(e,
                                                                              train_loss,
                                                                              valid_loss,
+        
                                                                              test_loss))
+        torch.save(dcrnn.state_dict(), str(e) + ".pt")
+
         wandb.watch(dcrnn)
